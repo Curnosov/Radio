@@ -7,7 +7,7 @@ class RadioTest {
     @Test
         // станция в допустимом диапазоне (0–9).
     void shouldSetStationInRange() {
-        Radio radio = new Radio();
+        Radio radio = new Radio(10);
         radio.setCurrentStation(5);
         assertEquals(5, radio.getCurrentStation());
     }
@@ -29,7 +29,7 @@ class RadioTest {
     }
 
     @Test
-        // цикличное переключение (с 9 на 0)
+        // цикличное переключение для фиксированного количества станций (с 9 на 0)
     void shouldCycleNextStation() {
         Radio radio = new Radio();
         radio.setCurrentStation(9);
@@ -47,7 +47,7 @@ class RadioTest {
     }
 
     @Test
-        // цикличное переключение станций (с 0 на 9)
+        // цикличное переключение станций для фиксированного количества станций(с 0 на 9)
     void shouldCyclePrevStationFromZero() {
         Radio radio = new Radio();
         radio.setCurrentStation(0);
@@ -131,14 +131,22 @@ class RadioTest {
         radio.setCurrentVolume(110);
         assertEquals(0, radio.getCurrentVolume());
     }
+
+    @Test
+        // цикличный переход для кастомного количества станций
+    void shouldCycleNextStationWithCustomTotal() {
+        Radio radio = new Radio(5); // 5 станций: 0–4
+        radio.setCurrentStation(4);
+        radio.nextStation();
+        assertEquals(0, radio.getCurrentStation());
+    }
+
+    @Test
+        // не допускает создание радио без станций
+    void shouldThrowExceptionWhenTotalStationsIsZero() {
+        assertThrows(IllegalArgumentException.class, () -> new Radio(0));
+
+    }
+
 }
 
-//  -------------------------------------------------------
-//[INFO]  T E S T S
-//[INFO] -------------------------------------------------------
-//[INFO] Running RadioTest
-//[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.051 s - in RadioTest
-//[INFO]
-//[INFO] Results:
-//[INFO]
-//[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0
